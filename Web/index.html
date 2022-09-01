@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="style.css">
+	<title>Crypt</title>
+	<script src="Crypt.js"></script>
+	
+</head>
+<body>
+	<div id="header"> Crypt</div>
+	<div id="content">
+		<div class="h_1">
+			<span>Text :</span><br>
+			<textarea id="text" placeholder="insert text here..."></textarea>
+		</div>
+		<br>
+		<div class="h_1">
+			<span>Key Level :</span>
+			<input type="number" id="level" max="999" value="1" style="width:40px">
+		</div>
+		<br>
+		<div class="h_1">
+			<span>Encrypt Key :</span>
+			<input type="text" id="key" placeholder="insert key here..." maxlength="16" style="width: 200px;"><span id="generate" class="h_2">Generate</span>
+		</div>
+		<br>
+		<div class="h_1">
+			<span>Encrypted Text:</span><br>
+			<textarea id="enc"></textarea>
+		</div>
+		<div class="h_1">
+			<span>Decripted Text:</span><br>
+			<textarea id="dec"></textarea>
+		</div>
+		<br>
+		<div class="h_1">
+			<span>Generated Decrypt Key :</span><span id="solve" class="h_3">_blank</span>
+		</div>
+		<br>
+		<div class="h_1">
+			<span id="run" class="h_2">Run</span>
+		</div>
+		<br>
+	</div>
+	<div id="footer"> System Encryption by Manja</div>
+
+	<script>
+		const _text = document.getElementById("text");
+		const _key = document.getElementById("key");
+		const _level = document.getElementById("level");
+		const _enc = document.getElementById("enc");
+		const _dec = document.getElementById("dec");
+		const _gen = document.getElementById("generate");
+		const _solve = document.getElementById("solve");
+		const _run = document.getElementById("run");
+
+		const _c = new Crypt();
+		const _te = new TextEncoder();
+		let level, key, data, time;
+
+		function BufferShow( buff ) {
+			let data = "";
+			buff.forEach(v => {
+				v = v.toString(16).toUpperCase();
+				if (v.length < 2) v = 0 + v;
+				data += v + " ";
+			});
+			return data;
+		}
+
+		const fromHexString = hexString =>
+			Uint8Array.from(hexString.replace(/\s/g, '').toLowerCase().match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
+
+		const toHexString = bytes =>
+			bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
+
+
+		function Generate() {
+			level = parseInt(_level.value);
+			_c.Level = level;
+			key = _c.Key;
+			_key.value = BufferShow(key);
+		}
+
+		function Run() {
+			if (_text.value == "") alert("Data Kosong");
+			else if (_key.value == "") alert("Key Kosong");
+			else {
+				key = fromHexString(_key.value);
+				data = _te.encode(_text.value);
+				_c.Key = key;
+				time = new Date().getTime();
+				_c.Convert = data;
+				_enc.value = '* '+ data.length + ' bytes in ' + (new Date().getTime()-time) + ' miliseconds.\n' + BufferShow(data);
+				Crypt.Solve(key, level);
+				_c.Key = key;
+				_solve.innerHTML = BufferShow(key);
+				time = new Date().getTime();
+				_c.Convert = data;
+				_dec.value = '* '+ data.length + ' bytes in ' + (new Date().getTime()-time) + ' miliseconds.\n' + BufferShow(data);
+			}
+		}
+
+		_gen.addEventListener("click", Generate);
+		_run.addEventListener("click", Run);
+
+	</script>
+</html>
