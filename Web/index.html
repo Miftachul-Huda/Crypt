@@ -92,15 +92,15 @@
 				key = fromHexString(_key.value);
 				data = _te.encode(_text.value);
 				_c.Key = key;
-				time = new Date().getTime();
+				time = performance.now();
 				_c.Convert = data;
-				_enc.value = '* '+ data.length + ' bytes in ' + (new Date().getTime()-time) + ' miliseconds.\n' + BufferShow(data);
+				_enc.value = '* '+ data.length + ' bytes in ' + (performance.now()-time) + ' miliseconds.\n' + BufferShow(data);
 				Crypt.Solve(key, level);
 				_c.Key = key;
 				_solve.innerHTML = BufferShow(key);
-				time = new Date().getTime();
+				time = performance.now();
 				_c.Convert = data;
-				_dec.value = '* '+ data.length + ' bytes in ' + (new Date().getTime()-time) + ' miliseconds.\n' + BufferShow(data);
+				_dec.value = '* '+ data.length + ' bytes in ' + (performance.now()-time) + ' miliseconds.\n' + BufferShow(data);
 			}
 		}
 
