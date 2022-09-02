@@ -94,13 +94,13 @@
 				_c.Key = key;
 				time = performance.now();
 				_c.Convert = data;
-				_enc.value = '* '+ data.length + ' bytes in ' + (performance.now()-time) + ' miliseconds.\n' + BufferShow(data);
+				_enc.value = `* ${data.length} bytes in ${performance.now()-time} ms.\n${BufferShow(data)}`;
 				Crypt.Solve(key, level);
 				_c.Key = key;
 				_solve.innerHTML = BufferShow(key);
 				time = performance.now();
 				_c.Convert = data;
-				_dec.value = '* '+ data.length + ' bytes in ' + (performance.now()-time) + ' miliseconds.\n' + BufferShow(data);
+				_dec.value = `* ${data.length} bytes in ${performance.now()-time} ms.\n${BufferShow(data)}`;
 			}
 		}
 
