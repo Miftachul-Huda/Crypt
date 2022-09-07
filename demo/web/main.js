@@ -46,8 +46,8 @@ function main() {
 				dec_total += performance.now()-time;
 			}
 			_solve.innerHTML = toHexString(dec_key);
-			_enc.value = `* Bytes Total = ${data.length}.\n* Times Total = ${enc_total} ms.\n* Times Per Run = ${enc_total/count} ms.\n_________________________________________________\n${toHexString(encrypt.Convert = data)}`;
-			_dec.value = `* Bytes Total = ${data.length}.\n* Times Total = ${dec_total} ms.\n* Times Per Run = ${dec_total/count} ms.\n_________________________________________________\n${toHexString(decrypt.Convert = data)}`;
+			_enc.value = `* Bytes = ${data.length}.\n* Times = ${enc_total/count} ms.\n* Bytes Total = ${data.length*count}.\n* Times Total = ${enc_total} ms.\n_________________________________________________\n${toHexString(encrypt.Convert = data)}`;
+			_dec.value = `* Bytes = ${data.length}.\n* Times = ${dec_total/count} ms.\n* Bytes Total = ${data.length*count}.\n* Times Total = ${dec_total} ms.\n_________________________________________________\n${toHexString(decrypt.Convert = data)}`;
 		}
 	}
 	_gen.addEventListener("click", Generate);
