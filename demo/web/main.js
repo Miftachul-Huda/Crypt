@@ -1,8 +1,10 @@
-import Crypt from Crypt;
+import { Crypt } from './src/Crypt.js';
 
 function main() {
+
 	const _text = document.getElementById("text");
 	const _key = document.getElementById("key");
+	const _count = document.getElementById("count");
 	const _level = document.getElementById("level");
 	const _enc = document.getElementById("enc");
 	const _dec = document.getElementById("dec");
@@ -10,58 +12,52 @@ function main() {
 	const _solve = document.getElementById("solve");
 	const _run = document.getElementById("run");
 	const encoder = new TextEncoder();
-	let level, key, data, time;
-	
-	function BufferShow( buff ) {
-		let text = "";
-		buff.forEach(v => {
-			v = v.toString(16).toUpperCase();
-			if (v.length < 2) v = 0 + v;
-			text += v + " ";
-		});
-		return text;
-	}
-	
-	const fromHexString = hexString =>
-		Uint8Array.from(hexString.replace(/\s/g, '').toLowerCase().match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
-	
-	const toHexString = bytes =>
-		bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
-	
-	
+	const encrypt = new Crypt();
+	const decrypt = new Crypt();
+	let count, level, enc_key, dec_key, enc_total, dec_total, data;
+
 	function Generate() {
-		level = parseInt(_level.value);
-		if (_level.value == "") {
-			alert("Level Kosong");
-			return;
-		}
-		_c.Level = level;
-		key = _c.Key;
-		_key.value = BufferShow(key);
+		if (_level.value == "") alert("Level Kosong");
+		else _key.value = toHexString(encrypt.Key);
 	}
-	
+
 	function Run() {
 		if (_text.value == "") alert("Data Kosong");
 		else if (_level.value == "") alert("Level Kosong");
 		else if (_key.value == "") alert("Key Kosong");
 		else {
 			data = encoder.encode(_text.value);
+			count = parseInt(_count.value);
 			level = parseInt(_level.value);
-			key = fromHexString(_key.value);
-			crypt.Key = key;
-			time = performance.now();
-			_c.Convert = data;
-			_enc.value = `* ${data.length} bytes in ${performance.now()-time} ms.\n${BufferShow(data)}`;
-			Crypt.Solve(key, level);
-			_c.Key = key;
-			_solve.innerHTML = BufferShow(key);
-			time = performance.now();
-			_c.Convert = data;
-			_dec.value = `* ${data.length} bytes in ${performance.now()-time} ms.\n${BufferShow(data)}`;
+			enc_key = fromHexString(_key.value);
+			dec_key = Uint8Array.from(enc_key);
+			Crypt.Solve(dec_key, level);
+			encrypt.Key = enc_key;
+			decrypt.Key = dec_key;
+			//encrypt.Level = level;
+
+			enc_total = dec_total = 0;
+			for(let i = 0, time; i < count; i++) {
+				time = performance.now();
+				encrypt.Convert = data;
+				enc_total += performance.now()-time;
+				time = performance.now();
+				decrypt.Convert = data;
+				dec_total += performance.now()-time;
+			}
+			_solve.innerHTML = toHexString(dec_key);
+			_enc.value = `* Bytes Total = ${data.length}.\n* Times Total = ${enc_total} ms.\n* Times Per Run = ${enc_total/count} ms.\n_________________________________________________\n${toHexString(encrypt.Convert = data)}`;
+			_dec.value = `* Bytes Total = ${data.length}.\n* Times Total = ${dec_total} ms.\n* Times Per Run = ${dec_total/count} ms.\n_________________________________________________\n${toHexString(decrypt.Convert = data)}`;
 		}
 	}
-	
 	_gen.addEventListener("click", Generate);
 	_run.addEventListener("click", Run);
-	
 }
+
+const fromHexString = hexString =>
+	Uint8Array.from(hexString.replace(/\s/g, '').toLowerCase().match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
+
+const toHexString = bytes =>
+	bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0').toUpperCase() + ' ', '');
+
+addEventListener('load', main);
