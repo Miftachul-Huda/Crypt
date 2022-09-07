@@ -129,3 +129,5 @@ class Crypt
 			key[ i ] = bit * hex2[ i + i ] + hex2[ i + i + 1 ];
 	}
 }
+
+export { Crypt }
