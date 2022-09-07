@@ -1,3 +1,6 @@
 [submodule "demo/web/src/js/Crypt.js"]
 	path = demo/web
 	url = https://github.com/ManjaDev/Crypt.git
+[submodule "demo/web/Crypt.js"]
+	path = demo/web/Crypt.js
+	url = https://github.com/ManjaDev/Crypt.git
