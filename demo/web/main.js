@@ -1,4 +1,4 @@
-import { Crypt } from './src/Crypt.js';
+import { Crypt } from './Crypt.js' ;
 
 function main() {
 
@@ -38,14 +38,15 @@ function main() {
 			decrypt.Key = dec_key;
 			encrypt.Level = level;
 			enc_total = dec_total = 0;
-			for(let i = 0, time; i < count; i++) {
-				time = performance.now();
+			let time;
+			time = performance.now();
+			for(let i = 0; i < count; i++)
 				encrypt.Convert = data;
-				enc_total += performance.now()-time;
-				time = performance.now();
+			enc_total += performance.now()-time;
+			time = performance.now();
+			for(let i = 0; i < count; i++)
 				decrypt.Convert = data;
-				dec_total += performance.now()-time;
-			}
+			dec_total += performance.now()-time;
 			_solve.innerHTML = toHexString(dec_key);
 			_enc.value = `* Bytes = ${data.length}.\n* Times = ${enc_total/count} ms.\n* Bytes Total = ${data.length*count}.\n* Times Total = ${enc_total} ms.\n________________________________________\n${toHexString(encrypt.Convert = data)}`;
 			_dec.value = `* Bytes = ${data.length}.\n* Times = ${dec_total/count} ms.\n* Bytes Total = ${data.length*count}.\n* Times Total = ${dec_total} ms.\n________________________________________\n${toHexString(decrypt.Convert = data)}`;

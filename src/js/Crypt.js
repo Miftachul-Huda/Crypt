@@ -59,27 +59,27 @@
 		 else val = this.Key;
 	 }
 	 /**
-		* @param {Uint8Array} val
+		* @param {Uint8Array} data
 		*/
-	 set Convert( val )
+	 set Convert( data )
 	 {
 		 let bit = this.BIT,
 				 hex = new Uint8Array( this.HEX );
  
-		 for ( let ii = 0; ii < val.length; ii++ )
+		 for ( let ii = 0; ii < data.length; ii++ )
 		 {
 			 let tmp = [];
  
 			 for ( let i = 0; true; i++ )
 			 {
-				 if ( i > 0 ) val[ ii ] = ( val[ ii ] - tmp[ tmp.length - 1 ] ) / bit;
+				 if ( i > 0 ) data[ ii ] = ( data[ ii ] - tmp[ tmp.length - 1 ] ) / bit;
  
-				 if ( val[ ii ] >= bit ) tmp.push( val[ ii ] % bit );
+				 if ( data[ ii ] >= bit ) tmp.push( data[ ii ] % bit );
  
 				 else
 				 {
-					 tmp.push( val[ ii ] );
-					 val[ ii ] = 0;
+					 tmp.push( data[ ii ] );
+					 data[ ii ] = 0;
 					 break;
 				 }
 			 }
@@ -88,13 +88,13 @@
  
 			 for ( let i = 0; i < tmp.length; i++ )
  
-				 val[ ii ] += hex[ tmp[ i ] ] * Math.pow( bit, i );
+			 data[ ii ] += hex[ tmp[ i ] ] * Math.pow( bit, i );
 		 }
 	 }
 	 /**
-		* @param {number} val
+		* @param {number} lvl
 		*/
-	 set Level( val )
+	 set Level( lvl )
 	 {
 		 let bit = this.BIT,
 				 key = new Uint8Array( this.KEY ),
@@ -102,17 +102,15 @@
  
 		 this.setHex( bit, key, hex );
  
-		 for ( let i = 0; i < val; i++ )
- 
+		 for ( let i = 0; i < lvl; i++ )
 			 this.Convert = key;
- 
 		 this.setHex( bit, key, hex );
 	 }
 	 /**
 		* @param {Uint8Array} key
 		* @param {number} lvl
 		*/
-	 Solve( key, lvl = 1 )
+	 Solve( key, lvl )
 	 {
 		 let bit = this.BIT,
 		 key1 = Uint8Array.from( key ),
@@ -129,7 +127,6 @@
 				 if ( hex1[ iii ] == ii ) hex2[ ii ] = iii;
 				 
 		 this.setKey( bit, key, hex2 );
- 
 		 this.setHex( bit, key, hex );
  
 		 for ( let i = 0; i < lvl; i++ )
